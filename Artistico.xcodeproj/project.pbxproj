@@ -15,6 +15,7 @@
 		4CDE751D1DB83E7E00F0F6CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE751B1DB83E7E00F0F6CB /* LaunchScreen.storyboard */; };
 		4CDE75281DB83E7F00F0F6CB /* ArtisticoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE75271DB83E7F00F0F6CB /* ArtisticoTests.swift */; };
 		4CDE75331DB83E7F00F0F6CB /* ArtisticoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE75321DB83E7F00F0F6CB /* ArtisticoUITests.swift */; };
+		4CDE75411DBC0B4900F0F6CB /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDE75401DBC0B4800F0F6CB /* Shape.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		4CDE752E1DB83E7F00F0F6CB /* ArtisticoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArtisticoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDE75321DB83E7F00F0F6CB /* ArtisticoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtisticoUITests.swift; sourceTree = "<group>"; };
 		4CDE75341DB83E7F00F0F6CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CDE75401DBC0B4800F0F6CB /* Shape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				4CDE75191DB83E7E00F0F6CB /* Assets.xcassets */,
 				4CDE751B1DB83E7E00F0F6CB /* LaunchScreen.storyboard */,
 				4CDE751E1DB83E7E00F0F6CB /* Info.plist */,
+				4CDE75401DBC0B4800F0F6CB /* Shape.swift */,
 			);
 			path = Artistico;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 				4CDE75151DB83E7E00F0F6CB /* SecondViewController.swift in Sources */,
 				4CDE75111DB83E7E00F0F6CB /* AppDelegate.swift in Sources */,
 				4CDE75131DB83E7E00F0F6CB /* FirstViewController.swift in Sources */,
+				4CDE75411DBC0B4900F0F6CB /* Shape.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

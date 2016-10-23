@@ -10,6 +10,8 @@ import UIKit
 
 class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    // enum property
+    
     enum BrushType {
         case line
         case circle
@@ -25,16 +27,30 @@ class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UI
     var alpha: CGFloat = 1.0
     var lineWidth: CGFloat = 1.0
     
-    let imagePicker = UIImagePickerController()
+    // Lazy property
+    lazy var imagePicker = UIImagePickerController()
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var lastPoint = CGPoint.zero
     var swiped = false
     
     var type = BrushType.line
+    var shape = Shape.medium
     
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        red = appDelegate.redValue
+        green = appDelegate.greenValue
+        blue = appDelegate.blueValue
+        alpha = appDelegate.alphaValue
+        lineWidth = appDelegate.widthValue
+        shape = appDelegate.shapeSize
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,8 +61,8 @@ class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UI
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             lastPoint = touch.location(in: self.view)
-            if(type == BrushType.circle) {
-                drawCircle(lastPoint)
+            if(type == BrushType.circle || type == BrushType.rectangle) {
+                drawShape(lastPoint)
             }
         }
     }
@@ -84,6 +100,7 @@ class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UI
         dismiss(animated: true, completion: nil)
     }
     
+    // Question marks after variable reference
     func drawLines(_ fromPoint: CGPoint, toPoint: CGPoint) {
         UIGraphicsBeginImageContext(self.view.frame.size)
         imageView.image?.draw(in: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
@@ -110,12 +127,30 @@ class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
 
     
-    func drawCircle(_ fromPoint: CGPoint) {
+    func drawShape(_ fromPoint: CGPoint) {
         UIGraphicsBeginImageContext(self.view.frame.size)
         imageView.image?.draw(in: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         let context = UIGraphicsGetCurrentContext()
-        let rectangle = CGRect(x: fromPoint.x, y: fromPoint.y, width: 50, height: 50)
-        context?.addEllipse(in: rectangle)
+        
+        // closure
+        let rect = {(multiple: CGFloat) -> CGRect in
+            return CGRect(x: fromPoint.x, y: fromPoint.y, width: 50 * multiple, height: 50 * multiple)
+            }
+        var rectangle: CGRect? = nil
+        if(shape == Shape.large) {
+            rectangle = rect(3)
+        } else if(shape == Shape.medium) {
+            rectangle = rect(1)
+        } else {
+            rectangle = rect(0.5)
+        }
+        
+        if(type == BrushType.circle) {
+            context?.addEllipse(in: rectangle!)
+        } else {
+            context?.addRect(rectangle!)
+        }
+        
         context?.setBlendMode(CGBlendMode.normal)
         context?.setLineCap(CGLineCap.round)
         context?.setLineWidth(lineWidth)
@@ -127,23 +162,6 @@ class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UI
         UIGraphicsEndImageContext()
     }
     
-    func drawRectangle(_ fromPoint: CGPoint) {
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        imageView.image?.draw(in: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-        let context = UIGraphicsGetCurrentContext()
-        let rectangle = CGRect(x: fromPoint.x, y: fromPoint.y, width: 50, height: 50)
-        context?.addRect(rectangle)
-        context?.setBlendMode(CGBlendMode.normal)
-        context?.setLineCap(CGLineCap.round)
-        context?.setLineWidth(lineWidth)
-        context?.setStrokeColor(UIColor(red: red, green: green, blue: blue, alpha: alpha).cgColor)
-        
-        context?.strokePath()
-        
-        imageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-    }
-
     @IBAction func clearButtonClick(_ sender: UIButton) {
         self.imageView.image = nil
     }
@@ -156,36 +174,40 @@ class FirstViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func saveButtonClick(_ sender: UIButton) {
+        UIImageWriteToSavedPhotosAlbum(imageView.image!, self, nil, nil)
     }
     
     @IBAction func eraseButtonClick(_ sender: UIButton) {
         type = BrushType.eraser
     }
     
+    // switch case supports all data types
     @IBAction func colorWheelClick(_ sender: AnyObject) {
         type = BrushType.line
         
         switch sender.tag {
         case 0:
-            (red, green, blue) = (1, 0, 0)
+            (red, green, blue) = (255.0, 0, 0)
         case 1:
             (red, green, blue) = (0, 0, 0)
         case 2:
-            (red, green, blue) = (1, 1, 0)
+            (red, green, blue) = (255.0, 255.0, 0)
         case 3:
-            (red, green, blue) = (0, 1, 1)
+            (red, green, blue) = (0, 255.0, 255.0)
         case 4:
-            (red, green, blue) = (1, 0, 1)
+            (red, green, blue) = (255.0, 0, 255.0)
         case 5:
-            (red, green, blue) = (0, 1, 0)
+            (red, green, blue) = (0, 255.0, 0)
         case 6:
-            (red, green, blue) = (0, 0, 1)
-        case 7:
-            (red, green, blue) = (1, 1, 1)
+            (red, green, blue) = (0, 0, 255.0)
         default:
             (red, green, blue) = (0, 0, 0)
         }
-
+        (appDelegate.redValue, appDelegate.greenValue, appDelegate.blueValue) = (red, green, blue)
+    }
+    
+    @IBAction func rectButtonClick(_ sender: UIButton) {
+        type = BrushType.rectangle
     }
     
     @IBAction func circleButtonClick(_ sender: UIButton) {

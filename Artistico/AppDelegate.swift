@@ -12,6 +12,13 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    var redValue: CGFloat = 0.0
+    var greenValue: CGFloat = 0.0
+    var blueValue: CGFloat = 0.0
+    var alphaValue: CGFloat = 1.0
+    var widthValue: CGFloat = 1.0
+    var shapeSize: Shape = Shape.medium
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
